@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Download Image</title>
+        <style>
+            #imageDisplayCanvas {
+                image-rendering: pixelated;
+                width: 256px;
+                height: 256px;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="imageDisplayCanvas" width="10" height="10"></canvas>
+        <script>
+            console.log("Applying image");
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const imgDataString = urlParams.get("d");
+            console.log(imgDataString);
+
+            const colors = {
+                0: "rgb(255, 255, 255)", // White
+                1: "rgb(255, 0, 0)", // Red
+                2: "rgb(255, 128, 0)", // Orange
+                3: "rgb(255, 255, 0)", // Yellow
+                4: "rgb(0, 255, 0)", // Green
+                5: "rgb(0, 255, 255)", // Teal
+                6: "rgb(0, 0, 255)", // Blue
+                7: "rgb(128, 0, 255)", // Purple
+                8: "rgb(255, 0, 128)", // Magenta
+                9: "rgb(0, 0, 0)", // Black
+            };
+
+            const canvas = document.getElementById("imageDisplayCanvas");
+            const ctx = canvas.getContext("2d");
+            for (var y = 0; y < canvas.height; y++) {
+                for (var x = 0; x < canvas.width; x++) {
+                    pixelString = imgDataString[y * canvas.height + x];
+                    console.log(pixelString);
+                    ctx.fillStyle = colors[pixelString];
+                    ctx.fillRect(x, y, 1, 1);
+                }
+            }
+
+            const downloadImage = function () {
+                console.log("Downloading image");
+                var link = document.createElement("a");
+                link.download = "image.png";
+                link.href = document
+                    .getElementById("imageDisplayCanvas")
+                    .toDataURL();
+                link.click();
+            };
+        </script>
+        <h1><button onclick="downloadImage()">Download Image</button></h1>
+    </body>
+</html>
